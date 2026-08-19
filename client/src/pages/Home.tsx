@@ -1,5 +1,7 @@
 // RideFlow Editorial Transit system: asymmetric workspace, warm sand surfaces, ink navy hierarchy, tangerine action signals, and tactile motion.
 import { useMemo, useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -34,6 +36,7 @@ import {
   Thermometer,
   UserRound,
   UsersRound,
+  UploadCloud,
   X,
   Zap,
 } from "lucide-react";
@@ -163,11 +166,42 @@ function Drivers() {
   return <div className="page-content simple-page"><div className="page-title-row"><div><span className="eyebrow">FAVORITE DRIVERS</span><h1>The people<br /><i>you remember.</i></h1><p>When a great ride happens, keep the connection.</p></div><button className="secondary-button"><Plus size={16} /> Add a favorite</button></div><div className="favorite-grid">{drivers.map((driver) => <div className="favorite-card" key={driver.name}><div className="favorite-card-top"><Avatar initials={driver.initials} color={driver.color} accent={driver.accent} /><button className="heart-button"><Heart size={17} fill="currentColor" /></button></div><h3>{driver.name}</h3><span>{driver.car}</span><div className="rating-line"><Star size={14} fill="currentColor" /> {driver.rating} <em>·</em> {driver.rides} rides</div><button className="secondary-button full" onClick={() => toast(`${driver.name} selected for your next ride.`)}>Request {driver.name.split(" ")[0]} <ArrowUpRight size={15} /></button></div>)}</div></div>;
 }
 
+function ProfileStoragePanel() {
+  const upload = trpc.files.upload.useMutation();
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputId = "rideflow-profile-photo";
+  const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = String(reader.result ?? "");
+      try {
+        await upload.mutateAsync({ name: file.name, mimeType: file.type, purpose: "profile_photo", base64: dataUrl });
+        toast.success("Profile photo uploaded securely.");
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Upload failed. Please try again.");
+      }
+    };
+    reader.onerror = () => toast.error("The file could not be read.");
+    reader.readAsDataURL(file);
+  };
+  return <div className="storage-panel"><div className="storage-panel-icon"><UploadCloud size={18} /></div><div><b>Profile photo</b><span>{fileName ?? "JPG, PNG, WEBP · up to 8 MB"}</span></div><input id={fileInputId} type="file" accept="image/jpeg,image/png,image/webp" onChange={onFileChange} hidden /><label htmlFor={fileInputId} className="secondary-button">{upload.isPending ? "Uploading…" : "Choose file"}</label></div>;
+}
+
 function Profile() {
-  return <div className="page-content simple-page"><div className="page-title-row"><div><span className="eyebrow">PROFILE &amp; SETTINGS</span><h1>Your ride,<br /><i>your rules.</i></h1><p>Preferences that travel with you.</p></div><Avatar initials="AM" color="#f5dfcc" accent="#935438" /></div><div className="profile-grid"><div className="profile-card"><div className="profile-avatar"><span>AM</span><button className="icon-button"><Plus size={15} /></button></div><h3>Alex Morgan</h3><span>alex.morgan@email.com</span><div className="profile-divider" /><button className="settings-row"><CreditCard size={17} /><span><b>Payment</b><small>Visa ending in 4242</small></span><ChevronDown size={16} /></button><button className="settings-row"><ShieldCheck size={17} /><span><b>Safety contacts</b><small>2 people can follow your trips</small></span><ChevronDown size={16} /></button></div><div className="preferences-card"><div className="subhead"><span><span className="eyebrow">DEFAULT PREFERENCES</span><b>Set once. Ride easy.</b></span><Settings2 size={17} /></div>{[["Quiet rides", MessageCircle, "On"], ["Cool cabin", Thermometer, "On"], ["Share trips automatically", UsersRound, "Off"]].map(([label, Icon, value]) => <div className="preference-setting" key={label as string}><span className="preference-setting-icon"><Icon size={17} /></span><span><b>{label as string}</b><small>{value === "On" ? "Applied to every ride" : "Choose contacts when booking"}</small></span><span className={value === "On" ? "switch on" : "switch"}><span /></span></div>)}</div></div></div>;
+  return <div className="page-content simple-page"><div className="page-title-row"><div><span className="eyebrow">PROFILE &amp; SETTINGS</span><h1>Your ride,<br /><i>your rules.</i></h1><p>Preferences that travel with you.</p></div><Avatar initials="AM" color="#f5dfcc" accent="#935438" /></div><div className="profile-grid"><div className="profile-card"><div className="profile-avatar"><span>AM</span><button className="icon-button"><Plus size={15} /></button></div><h3>Alex Morgan</h3><span>alex.morgan@email.com</span><ProfileStoragePanel /><div className="profile-divider" /><button className="settings-row"><CreditCard size={17} /><span><b>Payment</b><small>Visa ending in 4242</small></span><ChevronDown size={16} /></button><button className="settings-row"><ShieldCheck size={17} /><span><b>Safety contacts</b><small>2 people can follow your trips</small></span><ChevronDown size={16} /></button></div><div className="preferences-card"><div className="subhead"><span><span className="eyebrow">DEFAULT PREFERENCES</span><b>Set once. Ride easy.</b></span><Settings2 size={17} /></div>{[["Quiet rides", MessageCircle, "On"], ["Cool cabin", Thermometer, "On"], ["Share trips automatically", UsersRound, "Off"]].map(([label, Icon, value]) => <div className="preference-setting" key={label as string}><span className="preference-setting-icon"><Icon size={17} /></span><span><b>{label as string}</b><small>{value === "On" ? "Applied to every ride" : "Choose contacts when booking"}</small></span><span className={value === "On" ? "switch on" : "switch"}><span /></span></div>)}</div></div></div>;
 }
 
 export default function Home() {
+  // The useAuth hook provides authentication state.
+  // To implement login/logout, call logout(), or start login from an event
+  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
+  // startLogin() during render (no href={startLogin()}) — it mints a one-time
+  // nonce cookie and must run only at the moment of navigation.
+  let { user, loading, error, isAuthenticated, logout } = useAuth();
+
   const [view, setView] = useState<View>("overview");
   const [mode, setMode] = useState<Mode>("customer");
   const [signupOpen, setSignupOpen] = useState(false);
