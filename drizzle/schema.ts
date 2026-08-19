@@ -43,4 +43,52 @@ export const rideflowFiles = mysqlTable("rideflow_files", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type RideflowProfile = typeof rideflowProfiles.$inferSelect;
+export const rideflowFareRules = mysqlTable("rideflow_fare_rules", {
+  id: int("id").autoincrement().primaryKey(),
+  city: varchar("city", { length: 96 }).notNull().unique(),
+  baseFareKsh: int("baseFareKsh").notNull(),
+  distanceRateKshPerKm: int("distanceRateKshPerKm").notNull(),
+  timeRateKshPerMinute: int("timeRateKshPerMinute").notNull(),
+  minimumFareKsh: int("minimumFareKsh").notNull(),
+  safetyFeeKsh: int("safetyFeeKsh").notNull(),
+  platformCommissionBps: int("platformCommissionBps").notNull().default(500),
+  active: int("active").notNull().default(1),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const rideflowFareQuotes = mysqlTable("rideflow_fare_quotes", {
+  id: int("id").autoincrement().primaryKey(),
+  riderUserId: int("riderUserId").notNull(),
+  originLabel: varchar("originLabel", { length: 255 }).notNull(),
+  destinationLabel: varchar("destinationLabel", { length: 255 }).notNull(),
+  distanceMeters: int("distanceMeters").notNull(),
+  durationSeconds: int("durationSeconds").notNull(),
+  baseFareKsh: int("baseFareKsh").notNull(),
+  distanceFareKsh: int("distanceFareKsh").notNull(),
+  timeFareKsh: int("timeFareKsh").notNull(),
+  safetyFeeKsh: int("safetyFeeKsh").notNull(),
+  subtotalKsh: int("subtotalKsh").notNull(),
+  platformCommissionKsh: int("platformCommissionKsh").notNull(),
+  riderTotalKsh: int("riderTotalKsh").notNull(),
+  driverEarningsKsh: int("driverEarningsKsh").notNull(),
+  currency: varchar("currency", { length: 3 }).notNull().default("KES"),
+  status: mysqlEnum("status", ["quoted", "accepted", "completed", "cancelled"]).default("quoted").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+});
+
+export const rideflowLedgerEntries = mysqlTable("rideflow_ledger_entries", {
+  id: int("id").autoincrement().primaryKey(),
+  quoteId: int("quoteId").notNull(),
+  userId: int("userId").notNull(),
+  entryType: mysqlEnum("entryType", ["rider_charge", "driver_earning", "platform_commission", "refund", "tip", "payout"]).notNull(),
+  amountKsh: int("amountKsh").notNull(),
+  currency: varchar("currency", { length: 3 }).notNull().default("KES"),
+  description: varchar("description", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
 export type RideflowFile = typeof rideflowFiles.$inferSelect;
+export type RideflowFareRule = typeof rideflowFareRules.$inferSelect;
+export type RideflowFareQuote = typeof rideflowFareQuotes.$inferSelect;
+export type RideflowLedgerEntry = typeof rideflowLedgerEntries.$inferSelect;

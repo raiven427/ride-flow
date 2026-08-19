@@ -31,3 +31,5 @@ nav { display:grid; gap:4px; }.nav-item { width:100%; color:#6d7779; background:
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 .storage-panel{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px;background:#f7f2eb;border-radius:12px}.storage-panel-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#e7f0ec;color:var(--teal)}.storage-panel>div:nth-child(2){display:flex;flex-direction:column;gap:3px;flex:1}.storage-panel b{font-size:10px}.storage-panel span{color:#8b9492;font-size:9px}.storage-panel .secondary-button{padding:7px 9px}
+
+.driver-documents{display:flex;flex-direction:column;gap:8px;margin:16px 0}.driver-documents>.eyebrow{margin-bottom:2px}.document-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f7f2eb;border-radius:10px}.document-row>div{display:flex;flex-direction:column;gap:3px;flex:1}.document-row b{font-size:11px}.document-row small{font-size:9px;color:#8b9492}.document-row .secondary-button{padding:7px 10px}

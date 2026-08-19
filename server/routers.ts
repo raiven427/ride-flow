@@ -2,8 +2,9 @@ import { z } from "zod";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { insertRideflowFile, getRideflowProfile, upsertRideflowProfile } from "./db";
+import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
+import { getActiveFareRules, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, updateFareRules, upsertRideflowProfile } from "./db";
+import { calculateRideflowFare } from "./fare";
 import { storagePut } from "./storage";
 
 const uploadPurpose = z.enum(["profile_photo", "driver_license", "insurance", "vehicle_document", "lost_item"]);
@@ -35,6 +36,67 @@ export const appRouter = router({
         insurancePolicy: z.string().max(128).optional(),
       }))
       .mutation(({ ctx, input }) => upsertRideflowProfile({ userId: ctx.user.id, ...input })),
+  }),
+  fareRules: router({
+    update: adminProcedure
+      .input(z.object({
+        city: z.string().min(1).max(96),
+        baseFareKsh: z.number().int().min(0),
+        distanceRateKshPerKm: z.number().int().min(0),
+        timeRateKshPerMinute: z.number().int().min(0),
+        minimumFareKsh: z.number().int().min(0),
+        safetyFeeKsh: z.number().int().min(0),
+        platformCommissionBps: z.number().int().min(0).max(10000),
+      }))
+      .mutation(({ input }) => updateFareRules(input)),
+  }),
+  fares: router({
+    quote: protectedProcedure
+      .input(z.object({
+        originLabel: z.string().min(1).max(255),
+        destinationLabel: z.string().min(1).max(255),
+        distanceMeters: z.number().int().min(0).max(500000),
+        durationSeconds: z.number().int().min(0).max(86400),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const configuredRules = await getActiveFareRules("Nairobi");
+        const calculated = calculateRideflowFare({
+          ...input,
+          rules: configuredRules ? {
+            baseFareKsh: configuredRules.baseFareKsh,
+            distanceRateKshPerKm: configuredRules.distanceRateKshPerKm,
+            timeRateKshPerMinute: configuredRules.timeRateKshPerMinute,
+            minimumFareKsh: configuredRules.minimumFareKsh,
+            safetyFeeKsh: configuredRules.safetyFeeKsh,
+            platformCommissionRate: configuredRules.platformCommissionBps / 10000,
+          } : undefined,
+        });
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+        const quote = await insertFareQuote({
+          riderUserId: ctx.user.id,
+          originLabel: input.originLabel,
+          destinationLabel: input.destinationLabel,
+          distanceMeters: input.distanceMeters,
+          durationSeconds: input.durationSeconds,
+          baseFareKsh: calculated.baseFareKsh,
+          distanceFareKsh: calculated.distanceFareKsh,
+          timeFareKsh: calculated.timeFareKsh,
+          safetyFeeKsh: calculated.safetyFeeKsh,
+          subtotalKsh: calculated.subtotalKsh,
+          platformCommissionKsh: calculated.platformCommissionKsh,
+          riderTotalKsh: calculated.riderTotalKsh,
+          driverEarningsKsh: calculated.driverEarningsKsh,
+          currency: calculated.currency,
+          expiresAt,
+        });
+        if (!quote) throw new Error("Quote could not be created");
+        await insertLedgerEntries([
+          { quoteId: quote.id, userId: ctx.user.id, entryType: "rider_charge", amountKsh: quote.riderTotalKsh, currency: "KES", description: "Upfront RideFlow fare quote" },
+          { quoteId: quote.id, userId: ctx.user.id, entryType: "driver_earning", amountKsh: quote.driverEarningsKsh, currency: "KES", description: "Driver earnings after 5% commission" },
+          { quoteId: quote.id, userId: 0, entryType: "platform_commission", amountKsh: quote.platformCommissionKsh, currency: "KES", description: "RideFlow platform commission reserved for owner settlement" },
+        ]);
+        return { quote, calculated };
+      }),
   }),
   files: router({
     upload: protectedProcedure
