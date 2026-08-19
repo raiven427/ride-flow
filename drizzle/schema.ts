@@ -43,6 +43,17 @@ export const rideflowFiles = mysqlTable("rideflow_files", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type RideflowProfile = typeof rideflowProfiles.$inferSelect;
+export const rideflowAdminSettings = mysqlTable("rideflow_admin_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  singletonKey: varchar("singletonKey", { length: 32 }).notNull().unique(),
+  ownerEmail: varchar("ownerEmail", { length: 320 }).notNull(),
+  notificationEmail: varchar("notificationEmail", { length: 320 }).notNull(),
+  updatedByUserId: int("updatedByUserId"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RideflowAdminSettings = typeof rideflowAdminSettings.$inferSelect;
+
 export const rideflowFareRules = mysqlTable("rideflow_fare_rules", {
   id: int("id").autoincrement().primaryKey(),
   city: varchar("city", { length: 96 }).notNull().unique(),

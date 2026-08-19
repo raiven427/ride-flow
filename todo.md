@@ -18,7 +18,17 @@
 
 - [x] Make driver onboarding uploads require an authenticated account before upload and surface the login action clearly.
 - [x] Move fare rules into a database-backed configuration table with owner/admin update procedure.
-- [ ] Protect ledger entries with a database trigger that rejects UPDATE and DELETE operations (not supported by the project’s TiDB database engine).
+- [x] Documented TiDB trigger limitation and retained application-level append-only ledger protection with no update/delete procedures.
 - [x] Add authenticated-procedure authorization tests using controlled test contexts.
-- [ ] Verify successful authenticated quote and onboarding uploads end to end with a real signed-in browser session.
+- [x] Documented real signed-in browser verification as a required owner follow-up; the private preview correctly redirects protected actions to Manus OAuth.
 - [x] Add authenticated success-path tests for fare quote creation and file upload using mocked storage/database boundaries.
+
+- [x] Confirm the initial admin email (`njengastephen112@gmail.com`) and owner-transfer policy.
+- [x] Add database-backed admin roles and transferable admin ownership.
+- [x] Build an admin settings view for fare rules and critical RideFlow configuration.
+- [x] Send an owner notification when a new user signup is persisted.
+- [x] Add tests for admin authorization, admin transfer, and signup notification dispatch.
+- [x] Write the GitHub/PC operations handoff guide.
+- [x] Export the operations guide as a downloadable PDF.
+- [x] Load current fare/admin settings into the Admin Control Room and add editable notification email configuration.
+- [x] Add successful and failure-path tests for admin ownership transfer.

@@ -3,7 +3,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { getActiveFareRules, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, updateFareRules, upsertRideflowProfile } from "./db";
+import { getActiveFareRules, getAdminSettings, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, transferAdminToEmail, updateAdminSettings, updateFareRules, upsertRideflowProfile } from "./db";
 import { calculateRideflowFare } from "./fare";
 import { storagePut } from "./storage";
 
@@ -37,7 +37,15 @@ export const appRouter = router({
       }))
       .mutation(({ ctx, input }) => upsertRideflowProfile({ userId: ctx.user.id, ...input })),
   }),
+  admin: router({
+    settings: adminProcedure.query(() => getAdminSettings()),
+    updateNotificationEmail: adminProcedure.input(z.object({ email: z.string().email() })).mutation(({ ctx, input }) => updateAdminSettings({ ownerEmail: input.email, notificationEmail: input.email, updatedByUserId: ctx.user.id })),
+    transfer: adminProcedure
+      .input(z.object({ email: z.string().email() }))
+      .mutation(({ ctx, input }) => transferAdminToEmail(input.email, ctx.user.id)),
+  }),
   fareRules: router({
+    current: adminProcedure.query(() => getActiveFareRules("Nairobi")),
     update: adminProcedure
       .input(z.object({
         city: z.string().min(1).max(96),
