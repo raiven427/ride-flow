@@ -32,3 +32,12 @@
 - [x] Export the operations guide as a downloadable PDF.
 - [x] Load current fare/admin settings into the Admin Control Room and add editable notification email configuration.
 - [x] Add successful and failure-path tests for admin ownership transfer.
+
+- [ ] Diagnose the unresponsive GitHub Connect action.
+- [ ] Export RideFlow to a private GitHub repository or provide a verified ZIP-to-GitHub fallback.
+- [ ] Verify that secrets and private documents are excluded from the GitHub handoff.
+
+- [ ] Verify the new private GitHub repository target and source cleanliness.
+- [ ] Push the current RideFlow source to the private Rideflow repository.
+- [ ] Verify the pushed branch and repository privacy state.
+- [ ] Use the corrected private GitHub target `raiven427/ride-flow` for the source handoff.
