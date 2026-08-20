@@ -62,6 +62,6 @@
 - [x] Add portable self-hosting configuration and provider adapters.
 - [x] Write the new-database connection and migration PDF.
 - [x] Validate the portable build and update the private GitHub repository.
-- [ ] Push the self-hosting conversion commit to `raiven427/ride-flow`.
-- [ ] Verify GitHub contains the portable README, S3 storage adapter, OIDC auth adapter, and new database guide.
-- [ ] Verify GitHub no longer contains Manus-only runtime, debug, storage-proxy, or hosted-integration artifacts.
+- [x] Push the self-hosting conversion commit to `raiven427/ride-flow`.
+- [x] Verify GitHub contains the portable README, S3 storage adapter, OIDC auth adapter, and new database guide.
+- [x] Verify GitHub no longer contains Manus-only runtime, debug, storage-proxy, or hosted-integration artifacts.
