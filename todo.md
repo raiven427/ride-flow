@@ -33,11 +33,17 @@
 - [x] Load current fare/admin settings into the Admin Control Room and add editable notification email configuration.
 - [x] Add successful and failure-path tests for admin ownership transfer.
 
-- [ ] Diagnose the unresponsive GitHub Connect action.
-- [ ] Export RideFlow to a private GitHub repository or provide a verified ZIP-to-GitHub fallback.
-- [ ] Verify that secrets and private documents are excluded from the GitHub handoff.
+- [x] Diagnose the unresponsive GitHub Connect action; the initial connector/token lacked repository write access.
+- [x] Export RideFlow to the private GitHub repository `raiven427/ride-flow` using the authenticated GitHub CLI after merging its initial README.
+- [x] Verify that secrets and private documents are excluded from the GitHub handoff.
 
-- [ ] Verify the new private GitHub repository target and source cleanliness.
-- [ ] Push the current RideFlow source to the private Rideflow repository.
-- [ ] Verify the pushed branch and repository privacy state.
-- [ ] Use the corrected private GitHub target `raiven427/ride-flow` for the source handoff.
+- [x] Verify the new private GitHub repository target and source cleanliness.
+- [x] Push the current RideFlow source to the private Rideflow repository.
+- [x] Verify the pushed branch and repository privacy state.
+- [x] Use the corrected GitHub target `raiven427/ride-flow` for the source handoff.
+- [x] Prepare the latest source ZIP as a fallback phone-transfer archive.
+- [x] Documented the phone upload path; direct full-tree GitHub push was completed instead.
+- [x] Verify the repository contains the expected source directories and no tracked environment/credential files or obvious secret assignments.
+- [x] Verify GitHub repository access for the account associated with `njengastephen112@gmail.com` (authenticated GitHub login is `raiven427`).
+- [x] Transfer the complete readable source tree into `raiven427/ride-flow`.
+- [x] Verify all source directories are present and secrets are excluded.
