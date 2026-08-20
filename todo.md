@@ -51,3 +51,17 @@
 - [x] Write the RideFlow engineering and self-study handbook covering code, database, servers, APIs, payments, security, and operations.
 - [x] Compile and verify the handbook as a PDF.
 - [x] Deliver the PDF with a practical learning and launch roadmap.
+
+- [x] Audit Manus/project-hosted dependencies and define what must be replaced for self-hosting.
+- [x] Add a self-hosting configuration and remove hardcoded project-hosting assumptions.
+- [x] Preserve portable database, storage, authentication, and server contracts.
+- [x] Validate the portable build and update the private GitHub repository.
+- [x] Document removed dependencies and required services on the new host.
+
+- [x] Preserve existing database schema/data while separating the codebase from Manus-hosted services.
+- [x] Add portable self-hosting configuration and provider adapters.
+- [x] Write the new-database connection and migration PDF.
+- [x] Validate the portable build and update the private GitHub repository.
+- [ ] Push the self-hosting conversion commit to `raiven427/ride-flow`.
+- [ ] Verify GitHub contains the portable README, S3 storage adapter, OIDC auth adapter, and new database guide.
+- [ ] Verify GitHub no longer contains Manus-only runtime, debug, storage-proxy, or hosted-integration artifacts.

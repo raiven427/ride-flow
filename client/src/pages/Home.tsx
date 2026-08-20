@@ -63,7 +63,7 @@ const nav = [
 ] as const;
 
 function AppMark({ small = false }: { small?: boolean }) {
-  return <img className={small ? "app-mark app-mark-small" : "app-mark"} src="/manus-storage/rideflow-mark_a0f342ce.png" alt="RideFlow mark" />;
+  return <span className={small ? "app-mark app-mark-small" : "app-mark"} role="img" aria-label="RideFlow mark"><span className="app-mark-glyph">↗</span></span>;
 }
 
 function Avatar({ initials, color = "#e8ded0", accent = "#203c48" }: { initials: string; color?: string; accent?: string }) {
@@ -158,7 +158,7 @@ function Overview({ setView, setMode, openSignup }: { setView: (view: View) => v
   return <div className="page-content overview-page">
     <section className="hero-panel">
       <div className="hero-copy"><div className="eyebrow"><span className="eyebrow-line" /> GOOD MORNING, ALEX</div><h1>Your route,<br /><i>before</i> your ride.</h1><p>Upfront fares, drivers you can choose, and safety tools that stay with you from curb to curb.</p><div className="hero-actions"><button className="primary-button" onClick={() => setView("book")}>Book a ride <ArrowUpRight size={17} /></button><button className="text-button" onClick={openSignup}>Create an account <span>↗</span></button></div></div>
-      <div className="hero-image"><img src="/manus-storage/rideflow-hero_3161cc41.jpg" alt="Electric car on a sunlit city street" /><div className="hero-image-note"><Sparkles size={14} /><span>Designed around<br /><b>your peace of mind.</b></span></div></div>
+      <div className="hero-image"><div className="hero-image-placeholder" role="img" aria-label="Electric car on a sunlit city street" /><div className="hero-image-note"><Sparkles size={14} /><span>Designed around<br /><b>your peace of mind.</b></span></div></div>
     </section>
     <section className="overview-grid">
       <div className="section-heading"><div><span className="eyebrow">AT A GLANCE</span><h2>Less guesswork.<br />More getting there.</h2></div><button className="icon-button bordered" onClick={() => setView("trips")} aria-label="View all trips"><ArrowUpRight size={19} /></button></div>

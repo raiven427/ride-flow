@@ -1,0 +1,10 @@
+{
+  "task_kind": "markdown-to-pdf",
+  "output": "pdf",
+  "signals": ["database-setup", "self-hosting-guide"],
+  "content_features": {
+    "code_blocks": 8,
+    "defined_terms": 10,
+    "portrait_images": 0
+  }
+}

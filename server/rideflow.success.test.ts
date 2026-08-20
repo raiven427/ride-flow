@@ -65,7 +65,7 @@ describe("RideFlow authenticated success paths", () => {
   });
 
   it("uploads a driver license and persists private metadata", async () => {
-    mocks.storagePut.mockResolvedValue({ key: "42/rideflow/driver_license/license_abc.png", url: "/manus-storage/42/rideflow/driver_license/license_abc.png" });
+    mocks.storagePut.mockResolvedValue({ key: "42/rideflow/driver_license/license_abc.png", url: "https://storage.example.test/42/rideflow/driver_license/license_abc.png" });
     mocks.insertRideflowFile.mockResolvedValue({ id: 12, purpose: "driver_license", reviewStatus: "pending" });
 
     const caller = appRouter.createCaller(authenticatedContext());
