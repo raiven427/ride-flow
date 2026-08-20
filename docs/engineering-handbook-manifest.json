@@ -1,0 +1,10 @@
+{
+  "task_kind": "markdown-to-pdf",
+  "output": "pdf",
+  "signals": ["technical-handbook", "operations-guide"],
+  "content_features": {
+    "code_blocks": 5,
+    "defined_terms": 12,
+    "portrait_images": 0
+  }
+}

@@ -47,3 +47,7 @@
 - [x] Verify GitHub repository access for the account associated with `njengastephen112@gmail.com` (authenticated GitHub login is `raiven427`).
 - [x] Transfer the complete readable source tree into `raiven427/ride-flow`.
 - [x] Verify all source directories are present and secrets are excluded.
+
+- [x] Write the RideFlow engineering and self-study handbook covering code, database, servers, APIs, payments, security, and operations.
+- [x] Compile and verify the handbook as a PDF.
+- [x] Deliver the PDF with a practical learning and launch roadmap.
