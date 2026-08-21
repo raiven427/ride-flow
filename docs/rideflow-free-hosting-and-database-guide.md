@@ -56,7 +56,7 @@ Create an Aiven account, create one **Aiven for MySQL** service on the free tier
 Copy the provider’s secure connection values into a password manager. The final connection string should have this general shape, with your real values entered only in the host secret manager:
 
 ```text
-mysql://RIDEFLOW_USER:RIDEFLOW_PASSWORD:HOST:PORT/RIDEFLOW_DATABASE
+mysql://RIDEFLOW_USER:RIDEFLOW_PASSWORD@HOST:PORT/RIDEFLOW_DATABASE
 ```
 
 Use the exact URI format supplied by the provider. Some hosts include TLS parameters or special characters that must be URL-encoded. Do not guess the port, database name, or TLS options.
