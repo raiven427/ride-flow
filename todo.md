@@ -96,3 +96,4 @@
 - [x] Write and compile a second PDF covering browser verification, GPS/dispatch, retention, and launch steps.
 - [x] Add a payment-method selector above Profile photo with Cash, M-Pesa, PayPal, and Cards options.
 - [x] Document how to change the admin email and rotate the authentication credential without exposing passwords.
+- [ ] Write and compile a detailed PDF for authenticated browser verification, Stripe/M-Pesa sandbox testing, realtime GPS/dispatch hosting, and activity retention.
