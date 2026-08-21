@@ -71,5 +71,5 @@
 - [x] Add production validation and provider webhook contracts.
 - [x] Write and compile the deployment and payments setup PDF.
 - [x] Validate the handoff and push the deployment-ready code to private GitHub.
-- [ ] Push the latest Stripe/Daraja deployment scaffolding to `raiven427/ride-flow`.
-- [ ] Verify the private GitHub remote contains the latest payment, webhook, environment-template, and deployment-guide files.
+- [x] Push the latest Stripe/Daraja deployment scaffolding to `raiven427/ride-flow`.
+- [x] Verify the private GitHub remote contains the latest payment, webhook, environment-template, and deployment-guide files.
