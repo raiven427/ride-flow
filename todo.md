@@ -100,3 +100,4 @@
 - [x] Write and compile a detailed free-hosting deployment PDF covering server, database, authentication, storage, Stripe, M-Pesa, DNS, secrets, backups, and free-tier limitations.
 - [x] Correct the free-hosting PDF’s MySQL connection-string example and re-review deployment-critical commands before the final checkpoint.
 - [x] Write and compile a complete infrastructure and file-inventory PDF covering the application files, database, server, storage, authentication, payments, operations, backups, and deployment requirements.
+- [ ] Write and compile a professional developer onboarding and handoff PDF explaining RideFlow’s code, architecture, infrastructure, deployment, testing, unfinished work, and maintenance workflow.
