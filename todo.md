@@ -99,3 +99,4 @@
 - [x] Write and compile a detailed PDF for authenticated browser verification, Stripe/M-Pesa sandbox testing, realtime GPS/dispatch hosting, and activity retention.
 - [x] Write and compile a detailed free-hosting deployment PDF covering server, database, authentication, storage, Stripe, M-Pesa, DNS, secrets, backups, and free-tier limitations.
 - [x] Correct the free-hosting PDF’s MySQL connection-string example and re-review deployment-critical commands before the final checkpoint.
+- [ ] Write and compile a complete infrastructure and file-inventory PDF covering the application files, database, server, storage, authentication, payments, operations, backups, and deployment requirements.
