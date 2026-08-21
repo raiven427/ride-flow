@@ -62,3 +62,14 @@ nav { display:grid; gap:4px; }.nav-item { width:100%; color:#6d7779; background:
 .trip-empty-state { min-height:14rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.45rem; text-align:center; }
 .trip-empty-state .trip-icon { margin-bottom:.35rem; }
 .empty-driver-card { min-height:13rem; }
+.payment-method-panel { margin-top:1.15rem; padding-top:1rem; border-top:1px solid var(--line); }
+.payment-method-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-top:.8rem; }
+.payment-method { display:flex; align-items:center; gap:.55rem; min-width:0; padding:.65rem; border:1px solid var(--line); border-radius:.75rem; background:transparent; color:var(--ink); text-align:left; transition:transform 160ms ease-out, border-color 160ms ease-out, background 160ms ease-out; }
+.payment-method:hover { transform:translateY(-1px); border-color:var(--accent); }
+.payment-method.selected { border-color:var(--accent); background:#fff4ef; }
+.payment-method > span:nth-child(2) { display:flex; flex-direction:column; gap:.12rem; min-width:0; flex:1; }
+.payment-method b { font-size:.78rem; }
+.payment-method small { color:var(--muted); font-size:.64rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.payment-method-icon { width:1.75rem; height:1.75rem; border-radius:.55rem; display:grid; place-items:center; background:#eee7dc; color:var(--ink); flex:0 0 auto; }
+.payment-method.selected .payment-method-icon { background:var(--accent); color:white; }
+@media (max-width:520px) { .payment-method-grid { grid-template-columns:1fr; } }

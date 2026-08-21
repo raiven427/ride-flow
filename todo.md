@@ -90,3 +90,9 @@
 - [x] Record authenticated sign-in activity from `upsertUser` and add regression coverage.
 - [x] Commit and push the final refreshed source and Ubuntu guide to private GitHub; verify the remote.
 - [x] Add a Vitest regression test for `upsertUser` proving it records a `sign_in` activity event on signup and returning login.
+- [x] Prepare the existing Ubuntu developer PDF for direct download attachment.
+- [x] Attempt browser verification of customer, driver, and profile flows; document the remaining signed-in OAuth takeover blocker for customer/driver/admin protected-flow testing.
+- [x] Add practical GPS/dispatch architecture and activity-retention policy guidance for pre-launch readiness.
+- [x] Write and compile a second PDF covering browser verification, GPS/dispatch, retention, and launch steps.
+- [x] Add a payment-method selector above Profile photo with Cash, M-Pesa, PayPal, and Cards options.
+- [x] Document how to change the admin email and rotate the authentication credential without exposing passwords.
