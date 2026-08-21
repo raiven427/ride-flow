@@ -10,6 +10,8 @@ Read [the new database and self-hosting guide](docs/rideflow-new-database-guide.
 
 The [deployment, Stripe, and Daraja guide](docs/rideflow-deployment-payments-guide.md) explains servers, databases, storage, OIDC, Stripe Connect, M-Pesa Daraja, webhooks, secrets, backups, and launch checks.
 
+The [complete codebase and maintenance guide](docs/rideflow-complete-code-guide.md) maps the folders and files, explains request flow, database and fare logic, admin controls, payment scaffolding, and how to update the project safely.
+
 The broader [engineering handbook](docs/rideflow-engineering-handbook.md) explains the architecture, codebase, rider/driver data model, server flow, security, testing, payments, realtime rides, operations, and learning roadmap.
 
 ## Local development

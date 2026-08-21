@@ -73,3 +73,8 @@
 - [x] Validate the handoff and push the deployment-ready code to private GitHub.
 - [x] Push the latest Stripe/Daraja deployment scaffolding to `raiven427/ride-flow`.
 - [x] Verify the private GitHub remote contains the latest payment, webhook, environment-template, and deployment-guide files.
+
+- [ ] Audit the latest local deployment/payment code against private GitHub.
+- [ ] Write a complete codebase map and maintenance/update handbook.
+- [ ] Compile and verify the comprehensive code guide PDF.
+- [ ] Push the latest source and guide to private GitHub.
