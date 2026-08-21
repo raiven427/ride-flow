@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   getRideflowProfile: vi.fn(),
   upsertRideflowProfile: vi.fn(),
   storagePut: vi.fn(),
+  recordActivity: vi.fn(),
 }));
 
 vi.mock("./db", () => mocks);

@@ -3,7 +3,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import { getActiveFareRules, getAdminSettings, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, transferAdminToEmail, updateAdminSettings, updateFareRules, upsertRideflowProfile } from "./db";
+import { getActiveFareRules, getAdminOperationsSnapshot, getAdminSettings, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, recordActivity, transferAdminToEmail, updateAdminSettings, updateFareRules, upsertPresence, upsertRideflowProfile } from "./db";
 import { calculateRideflowFare } from "./fare";
 import { storagePut } from "./storage";
 import { createStripeRidePayment, getPaymentProviderStatus, requestDarajaStkPush } from "./payments";
@@ -18,6 +18,10 @@ function safeFileName(name: string) {
 
 export const appRouter = router({
   system: systemRouter,
+  presence: router({
+    heartbeat: protectedProcedure.input(z.object({ status: z.enum(["online", "away", "offline"]).default("online"), currentView: z.string().max(96).optional() })).mutation(async ({ ctx, input }) => { await upsertPresence({ userId: ctx.user.id, ...input }); await recordActivity({ userId: ctx.user.id, eventType: "presence", summary: `User presence changed to ${input.status}`, metadata: { currentView: input.currentView } }); return { ok: true }; }),
+    activity: protectedProcedure.input(z.object({ eventType: z.string().max(96), summary: z.string().max(255), metadata: z.record(z.string(), z.unknown()).optional() })).mutation(async ({ ctx, input }) => { await recordActivity({ userId: ctx.user.id, ...input }); return { ok: true }; }),
+  }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -39,11 +43,12 @@ export const appRouter = router({
       .mutation(({ ctx, input }) => upsertRideflowProfile({ userId: ctx.user.id, ...input })),
   }),
   admin: router({
+    operations: adminProcedure.query(() => getAdminOperationsSnapshot()),
     settings: adminProcedure.query(() => getAdminSettings()),
-    updateNotificationEmail: adminProcedure.input(z.object({ email: z.string().email() })).mutation(({ ctx, input }) => updateAdminSettings({ ownerEmail: input.email, notificationEmail: input.email, updatedByUserId: ctx.user.id })),
+    updateNotificationEmail: adminProcedure.input(z.object({ email: z.string().email() })).mutation(async ({ ctx, input }) => { const result = await updateAdminSettings({ ownerEmail: input.email, notificationEmail: input.email, updatedByUserId: ctx.user.id }); await recordActivity({ userId: ctx.user.id, eventType: "admin_settings", summary: "Updated the signup notification recipient" }); return result; }),
     transfer: adminProcedure
       .input(z.object({ email: z.string().email() }))
-      .mutation(({ ctx, input }) => transferAdminToEmail(input.email, ctx.user.id)),
+      .mutation(async ({ ctx, input }) => { const result = await transferAdminToEmail(input.email, ctx.user.id); await recordActivity({ userId: ctx.user.id, eventType: "admin_transfer", summary: `Transferred admin ownership to ${input.email}` }); return result; }),
   }),
   payments: router({
     status: adminProcedure.query(() => getPaymentProviderStatus()),
@@ -124,6 +129,7 @@ export const appRouter = router({
           { quoteId: quote.id, userId: ctx.user.id, entryType: "driver_earning", amountKsh: quote.driverEarningsKsh, currency: "KES", description: "Driver earnings after 5% commission" },
           { quoteId: quote.id, userId: 0, entryType: "platform_commission", amountKsh: quote.platformCommissionKsh, currency: "KES", description: "RideFlow platform commission reserved for owner settlement" },
         ]);
+        await recordActivity({ userId: ctx.user.id, eventType: "fare_quote", summary: `Created a KSh ${quote.riderTotalKsh} fare quote`, metadata: { quoteId: quote.id, origin: input.originLabel, destination: input.destinationLabel } });
         return { quote, calculated };
       }),
   }),
@@ -168,6 +174,7 @@ export const appRouter = router({
             profilePhotoFileId: file.id,
           });
         }
+        await recordActivity({ userId: ctx.user.id, eventType: "file_upload", summary: `Uploaded ${input.purpose.replaceAll("_", " ")}`, metadata: { purpose: input.purpose, mimeType: input.mimeType, byteSize: buffer.length } });
         return file;
       }),
   }),

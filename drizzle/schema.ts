@@ -103,3 +103,26 @@ export type RideflowFile = typeof rideflowFiles.$inferSelect;
 export type RideflowFareRule = typeof rideflowFareRules.$inferSelect;
 export type RideflowFareQuote = typeof rideflowFareQuotes.$inferSelect;
 export type RideflowLedgerEntry = typeof rideflowLedgerEntries.$inferSelect;
+
+/** Current authenticated session presence. Online means a heartbeat was received recently. */
+export const rideflowPresence = mysqlTable("rideflow_presence", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  status: mysqlEnum("status", ["online", "away", "offline"]).default("online").notNull(),
+  currentView: varchar("currentView", { length: 96 }),
+  lastSeenAt: timestamp("lastSeenAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+/** Append-only operational events for the admin activity feed. */
+export const rideflowActivityEvents = mysqlTable("rideflow_activity_events", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"),
+  eventType: varchar("eventType", { length: 96 }).notNull(),
+  summary: varchar("summary", { length: 255 }).notNull(),
+  metadataJson: text("metadataJson"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type RideflowPresence = typeof rideflowPresence.$inferSelect;
+export type RideflowActivityEvent = typeof rideflowActivityEvents.$inferSelect;

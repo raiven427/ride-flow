@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, rideflowAdminSettings, rideflowFareQuotes, rideflowFareRules, rideflowFiles, rideflowLedgerEntries, rideflowProfiles, users } from "../drizzle/schema";
+import { InsertUser, rideflowActivityEvents, rideflowAdminSettings, rideflowFareQuotes, rideflowFareRules, rideflowFiles, rideflowLedgerEntries, rideflowPresence, rideflowProfiles, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 import { notifyOwner } from "./_core/notification";
 
@@ -51,6 +51,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   values.lastSignedIn ??= new Date();
   if (Object.keys(updateSet).length === 0) updateSet.lastSignedIn = new Date();
   await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
+  const persistedUser = await getUserByOpenId(user.openId);
+  await recordActivity({ userId: persistedUser?.id, eventType: "sign_in", summary: `Signed in${user.email ? ` as ${user.email}` : ""}`, metadata: { firstSignup: isFirstSignup } });
   if (isFirstSignup) await notifyNewSignup(user);
 }
 
@@ -172,5 +174,27 @@ export async function insertLedgerEntries(entries: Array<typeof rideflowLedgerEn
   if (entries.length === 0) return [];
   await db.insert(rideflowLedgerEntries).values(entries);
   return db.select().from(rideflowLedgerEntries).where(eq(rideflowLedgerEntries.quoteId, entries[0].quoteId));
+}
+
+export async function upsertPresence(input: { userId: number; status: "online" | "away" | "offline"; currentView?: string }) {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(rideflowPresence).values({ userId: input.userId, status: input.status, currentView: input.currentView ?? null, lastSeenAt: new Date() }).onDuplicateKeyUpdate({ set: { status: input.status, currentView: input.currentView ?? null, lastSeenAt: new Date() } });
+}
+
+export async function recordActivity(input: { userId?: number; eventType: string; summary: string; metadata?: Record<string, unknown> }) {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(rideflowActivityEvents).values({ userId: input.userId ?? null, eventType: input.eventType, summary: input.summary, metadataJson: input.metadata ? JSON.stringify(input.metadata) : null });
+}
+
+export async function getAdminOperationsSnapshot() {
+  const db = await getDb();
+  if (!db) return { users: [], recentActivity: [], counts: { totalUsers: 0, onlineUsers: 0, drivers: 0, customers: 0 } };
+  const allUsers = await db.select({ id: users.id, name: users.name, email: users.email, role: users.role, lastSignedIn: users.lastSignedIn, presenceStatus: rideflowPresence.status, currentView: rideflowPresence.currentView, lastSeenAt: rideflowPresence.lastSeenAt }).from(users).leftJoin(rideflowPresence, eq(users.id, rideflowPresence.userId)).orderBy(desc(users.lastSignedIn));
+  const recentActivity = await db.select().from(rideflowActivityEvents).orderBy(desc(rideflowActivityEvents.createdAt)).limit(30);
+  const cutoff = Date.now() - 90_000;
+  const onlineUsers = allUsers.filter(user => user.presenceStatus === "online" && user.lastSeenAt && user.lastSeenAt.getTime() >= cutoff);
+  return { users: allUsers, recentActivity, counts: { totalUsers: allUsers.length, onlineUsers: onlineUsers.length, drivers: 0, customers: 0 } };
 }
 

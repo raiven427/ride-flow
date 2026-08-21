@@ -78,3 +78,15 @@
 - [x] Write a complete codebase map and maintenance/update handbook.
 - [x] Compile and verify the comprehensive code guide PDF.
 - [x] Push the latest source and guide to private GitHub.
+
+- [x] Reset demo earnings, savings, trips, and activity metrics to zero/new-installation values without removing admin settings.
+- [x] Add authenticated presence and activity data for admin operations monitoring.
+- [x] Build an admin-only operations dashboard for online users and app activity.
+- [x] Write and compile an Ubuntu/developer operations PDF for the new dashboard and maintenance workflow.
+- [x] Validate and push the refreshed app and documentation to private GitHub.
+- [x] Reset remaining hardcoded driver earnings/acceptance metrics and trip history to true new-installation empty states.
+- [x] Wire meaningful activity logging into sign-in, fare quote, upload, and admin settings actions.
+- [x] Add explicit loading, refresh, and error states to the admin operations dashboard.
+- [x] Record authenticated sign-in activity from `upsertUser` and add regression coverage.
+- [ ] Commit and push the final refreshed source and Ubuntu guide to private GitHub; verify the remote.
+- [x] Add a Vitest regression test for `upsertUser` proving it records a `sign_in` activity event on signup and returning login.

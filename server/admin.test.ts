@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   transferAdminToEmail: vi.fn(),
   notifyOwner: vi.fn(),
   notifyNewSignup: vi.fn(async (user: { email?: string }, recipient?: string) => mocks.notifyOwner({ title: "New RideFlow signup", content: `A new user account signed up${user.email ? ` (${user.email})` : ""}. Configured admin notification recipient: ${recipient ?? "not configured"}.` })),
+  recordActivity: vi.fn(),
 }));
 
 vi.mock("./db", () => ({
@@ -13,6 +14,7 @@ vi.mock("./db", () => ({
   updateFareRules: mocks.updateFareRules,
   transferAdminToEmail: mocks.transferAdminToEmail,
   notifyNewSignup: mocks.notifyNewSignup,
+  recordActivity: mocks.recordActivity,
 }));
 vi.mock("./_core/notification", () => ({ notifyOwner: mocks.notifyOwner }));
 
