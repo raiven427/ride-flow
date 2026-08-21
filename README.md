@@ -8,6 +8,8 @@ This repository is prepared for self-hosting. It keeps the React frontend, Expre
 
 Read [the new database and self-hosting guide](docs/rideflow-new-database-guide.md) before changing infrastructure. The guide explains database creation, migrations, environment variables, private file storage, OIDC login, notifications, data migration, backups, and production gaps.
 
+The [deployment, Stripe, and Daraja guide](docs/rideflow-deployment-payments-guide.md) explains servers, databases, storage, OIDC, Stripe Connect, M-Pesa Daraja, webhooks, secrets, backups, and launch checks.
+
 The broader [engineering handbook](docs/rideflow-engineering-handbook.md) explains the architecture, codebase, rider/driver data model, server flow, security, testing, payments, realtime rides, operations, and learning roadmap.
 
 ## Local development

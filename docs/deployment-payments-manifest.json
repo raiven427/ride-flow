@@ -1,0 +1,10 @@
+{
+  "task_kind": "markdown-to-pdf",
+  "output": "pdf",
+  "signals": ["deployment", "payments", "stripe", "mpesa", "daraja"],
+  "content_features": {
+    "code_blocks": 11,
+    "defined_terms": 12,
+    "portrait_images": 0
+  }
+}

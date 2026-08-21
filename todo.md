@@ -65,3 +65,11 @@
 - [x] Push the self-hosting conversion commit to `raiven427/ride-flow`.
 - [x] Verify GitHub contains the portable README, S3 storage adapter, OIDC auth adapter, and new database guide.
 - [x] Verify GitHub no longer contains Manus-only runtime, debug, storage-proxy, or hosted-integration artifacts.
+
+- [x] Audit current Stripe, M-Pesa Daraja, deployment, and production environment boundaries.
+- [x] Add environment-driven Stripe and Daraja configuration scaffolding without real credentials.
+- [x] Add production validation and provider webhook contracts.
+- [x] Write and compile the deployment and payments setup PDF.
+- [x] Validate the handoff and push the deployment-ready code to private GitHub.
+- [ ] Push the latest Stripe/Daraja deployment scaffolding to `raiven427/ride-flow`.
+- [ ] Verify the private GitHub remote contains the latest payment, webhook, environment-template, and deployment-guide files.

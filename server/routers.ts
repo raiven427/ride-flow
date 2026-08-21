@@ -6,6 +6,7 @@ import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_
 import { getActiveFareRules, getAdminSettings, insertFareQuote, insertLedgerEntries, insertRideflowFile, getRideflowProfile, transferAdminToEmail, updateAdminSettings, updateFareRules, upsertRideflowProfile } from "./db";
 import { calculateRideflowFare } from "./fare";
 import { storagePut } from "./storage";
+import { createStripeRidePayment, getPaymentProviderStatus, requestDarajaStkPush } from "./payments";
 
 const uploadPurpose = z.enum(["profile_photo", "driver_license", "insurance", "vehicle_document", "lost_item"]);
 const acceptedMimeTypes = new Set(["image/jpeg", "image/png", "image/webp", "application/pdf"]);
@@ -43,6 +44,26 @@ export const appRouter = router({
     transfer: adminProcedure
       .input(z.object({ email: z.string().email() }))
       .mutation(({ ctx, input }) => transferAdminToEmail(input.email, ctx.user.id)),
+  }),
+  payments: router({
+    status: adminProcedure.query(() => getPaymentProviderStatus()),
+    stripeIntent: protectedProcedure
+      .input(z.object({
+        amountKsh: z.number().int().positive(),
+        platformFeeKsh: z.number().int().min(0),
+        rideId: z.string().min(1).max(96),
+        customerId: z.string().optional(),
+        connectedAccountId: z.string().optional(),
+      }))
+      .mutation(({ input }) => createStripeRidePayment(input)),
+    darajaStkPush: protectedProcedure
+      .input(z.object({
+        phoneNumber: z.string().min(10).max(15),
+        amountKsh: z.number().int().positive(),
+        accountReference: z.string().min(1).max(32),
+        transactionDescription: z.string().min(1).max(32),
+      }))
+      .mutation(({ input }) => requestDarajaStkPush(input)),
   }),
   fareRules: router({
     current: adminProcedure.query(() => getActiveFareRules("Nairobi")),

@@ -7,6 +7,27 @@ export const ENV = {
   oauthUserInfoUrl: process.env.OAUTH_USERINFO_URL ?? "",
   oauthClientId: process.env.OAUTH_CLIENT_ID ?? process.env.VITE_APP_ID ?? "",
   oauthClientSecret: process.env.OAUTH_CLIENT_SECRET ?? "",
+  oauthAuthorizeUrl: process.env.VITE_OAUTH_AUTHORIZE_URL ?? "",
+  oauthScope: process.env.VITE_OAUTH_SCOPE ?? "openid profile email",
   ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
   isProduction: process.env.NODE_ENV === "production",
-};
+  publicAppUrl: process.env.PUBLIC_APP_URL ?? "http://localhost:3000",
+  stripe: {
+    secretKey: process.env.STRIPE_SECRET_KEY ?? "",
+    publishableKey: process.env.VITE_STRIPE_PUBLISHABLE_KEY ?? "",
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+    connectClientId: process.env.STRIPE_CONNECT_CLIENT_ID ?? "",
+    enabled: process.env.PAYMENTS_STRIPE_ENABLED === "true",
+  },
+  daraja: {
+    consumerKey: process.env.DARAJA_CONSUMER_KEY ?? "",
+    consumerSecret: process.env.DARAJA_CONSUMER_SECRET ?? "",
+    shortcode: process.env.DARAJA_SHORTCODE ?? "",
+    passkey: process.env.DARAJA_PASSKEY ?? "",
+    initiatorName: process.env.DARAJA_INITIATOR_NAME ?? "",
+    securityCredential: process.env.DARAJA_SECURITY_CREDENTIAL ?? "",
+    callbackBaseUrl: process.env.DARAJA_CALLBACK_BASE_URL ?? "",
+    environment: process.env.DARAJA_ENVIRONMENT === "production" ? "production" : "sandbox",
+    enabled: process.env.PAYMENTS_DARAJA_ENABLED === "true",
+  },
+} as const;
