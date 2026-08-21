@@ -97,3 +97,4 @@
 - [x] Add a payment-method selector above Profile photo with Cash, M-Pesa, PayPal, and Cards options.
 - [x] Document how to change the admin email and rotate the authentication credential without exposing passwords.
 - [x] Write and compile a detailed PDF for authenticated browser verification, Stripe/M-Pesa sandbox testing, realtime GPS/dispatch hosting, and activity retention.
+- [ ] Write and compile a detailed free-hosting deployment PDF covering server, database, authentication, storage, Stripe, M-Pesa, DNS, secrets, backups, and free-tier limitations.
