@@ -103,3 +103,4 @@
 - [x] Write and compile a professional developer onboarding and handoff PDF explaining RideFlow’s code, architecture, infrastructure, deployment, testing, unfinished work, and maintenance workflow.
 - [x] Write and compile detailed beginner developer notes for all ten RideFlow learning areas, including explanations, examples, exercises, commands, mistakes, and a study path.
 - [x] Write and compile a comprehensive PDF documenting every development style and engineering pattern used in RideFlow, with examples and guidance on when to use each one.
+- [ ] Create and compile a PDF listing RideFlow’s programming languages, frameworks, libraries, infrastructure, and recommended learning order.
